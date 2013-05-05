@@ -1,0 +1,69 @@
+#!/bin/sh
+
+## live-build(7) - System Build Scripts
+## Copyright (C) 2012 soportelihuen <soportelihuen@linti.unlp.edu.ar>
+## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+##
+## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+set -e
+
+# Including common functions
+[ -e "${LIVE_BUILD}/scripts/build.sh" ] && . "${LIVE_BUILD}/scripts/build.sh" || . /usr/lib/live/build.sh
+
+# Setting static variables
+DESCRIPTION="$(Echo 'queue install of lihuen package lists into chroot')"
+HELP=""
+USAGE="${PROGRAM} {install|live} [--force]"
+
+Arguments "${@}"
+
+# Reading configuration files
+Read_conffiles config/all config/common config/bootstrap config/chroot config/binary config/source
+Set_defaults
+
+Echo_message "Begin queueing installation of package lists (${_PASS} pass)..."
+
+# Requiring stage file
+Require_stagefile .build/config .build/bootstrap
+
+# Checking stage file
+Check_stagefile .build/chroot_lihuen-lists
+
+# Checking lock file
+Check_lockfile .lock
+
+# Creating lock file
+Create_lockfile .lock
+
+
+DESTINY="config/package-lists/lihuen.chroot.list"
+
+#DESTINY="${1}"; shift
+#TASKS=
+
+
+#if [ -e ${DESTINY}/lihuen.chroot.list ];then
+#  rm ${DESTINY}/lihuen.chroot.list
+#fi
+
+#rm config/package-lists/*
+
+#Lihuen lxde lihuen-base lihuen-kernel-i386 lihuen-lxde-desktop
+
+#for tarea in ${LB_TASK_LIHUEN};do
+#  tasksel --task-packages ${tarea} >> ${DESTINY}
+#done
+
+#cat paquetesLihuen.txt > ${DESTINY}/my.list.chroot
+
+#while read line;do
+#    echo -n "$line " >> paquetesLihuenInLine.txt
+#done < paquetesLihuen.txt
+
+# Creating stage file
+Create_stagefile .build/chroot_lihuen-lists
+
